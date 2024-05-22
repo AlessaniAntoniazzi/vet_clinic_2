@@ -14,6 +14,11 @@ class TutorService {
     const createdTutor = await TutorRepository.createTutors(tutorProps);
     return createdTutor;
   }
+
+  public async tutorUpdate(id: string, updateProps: Partial<Pick<ITutor, 'email' | 'date_of_birth'>>): Promise<ITutor | null> {
+    const updatedTutor = await TutorRepository.updateTutor(id, updateProps);
+    return updatedTutor;
+  }
 }
 
 export default new TutorService();

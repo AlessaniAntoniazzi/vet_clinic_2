@@ -6,9 +6,20 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Vet Clinic',
+      title: 'Tutor API',
       version: '1.0.0',
+      description: 'API documentation for the Tutor application',
     },
+    tags: [
+      {
+        name: 'Tutors',
+        description: 'API for tutors',
+      },
+      {
+        name: 'Pets',
+        description: 'API for pets',
+      },
+    ],
     components: {
       schemas: {
         Tutor: {
@@ -92,6 +103,7 @@ const options = {
     paths: {
       '/api/tutors': {
         get: {
+          tags: ['Tutors'],
           summary: 'Retrieve a list of tutors',
           responses: {
             200: {
@@ -110,6 +122,7 @@ const options = {
           },
         },
         post: {
+          tags: ['Tutors'],
           summary: 'Create a new tutor',
           requestBody: {
             required: true,
@@ -155,9 +168,104 @@ const options = {
           },
         },
       },
+      '/api/tutors/{id}': {
+        put: {
+          tags: ['Tutors'],
+          summary: 'Update an existing tutor',
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                example: '60d21b4667d0d8992e610c85',
+              },
+              description: 'ID of the tutor to update',
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    email: {
+                      type: 'string',
+                      example: 'john.doe@example.com',
+                    },
+                    date_of_birth: {
+                      type: 'string',
+                      format: 'date',
+                      example: '1990-01-01',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Tutor updated successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Tutor',
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Bad request',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/ValidationError',
+                  },
+                },
+              },
+            },
+            404: {
+              description: 'Tutor not found',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      statusCode: {
+                        type: 'number',
+                        example: 404,
+                      },
+                      message: {
+                        type: 'string',
+                        example: 'Tutor not found',
+                      },
+                      error: {
+                        type: 'string',
+                        example: 'Not Found',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/InternalServerError',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts'], 
+  apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
 };
 
 const specs = swaggerJSDoc(options);
