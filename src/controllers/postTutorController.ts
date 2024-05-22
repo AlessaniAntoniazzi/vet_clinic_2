@@ -1,19 +1,20 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import TutorService from '../services/tutorServices';
 import { ITutor } from '../models/tutorModel';
+import ValidationError from '../error/validationError';
+import InternalServerError from '../error/internalServer';
 
 class PostTutorController {
-  public async createTutor(req: Request, res: Response) {
+  public async createTutor(req: Request, res: Response, next: NextFunction) {
     try {
       const tutorProps: ITutor = req.body;
       const newTutor = await TutorService.tutorCreate(tutorProps);
       res.send(newTutor);
     } catch (err: any) {
-      console.error('Error creating tutor:', err);
       if (err.message.includes('Duplicate key error')) {
-        res.status(400).json({ error: err.message });
+        next(new ValidationError([{ resource: 'email', message: 'Email must be unique' }]));
       } else {
-        res.status(500).json({ error: 'Internal server error' });
+        next(new InternalServerError());
       }
     }
   }

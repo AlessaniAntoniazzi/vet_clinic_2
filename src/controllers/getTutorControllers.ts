@@ -1,14 +1,16 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import TutorService from '../services/tutorServices';
+import InternalServerError from '../error/internalServer';
 import { ITutor } from '../models/tutorModel';
 
+
 class GetTutorController {
-  public async getTutors(req: Request, res: Response) {
+  public async getTutors(req: Request, res: Response, next: NextFunction) {
     try {
       const tutors = await TutorService.getTutors();
       res.send(tutors);
     } catch (err: any) {
-      res.status(500).json({ error: 'Internal server error' });
+      next(new InternalServerError());
     }
   }
 }
