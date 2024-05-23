@@ -18,6 +18,10 @@ class TutorRepository {
   public async updateTutor(id: string, updateProps: Partial<Pick<ITutor, 'email' | 'date_of_birth'>>): Promise<ITutor | null> {
     return Tutor.findByIdAndUpdate(id, updateProps, {new: true});
   }
+
+  public async deleteTutor (id: string): Promise<ITutor | null> {
+    return Tutor.findByIdAndDelete(id);
+  }
 }
 
 export default new TutorRepository();

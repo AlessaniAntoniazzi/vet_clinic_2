@@ -19,6 +19,12 @@ class TutorService {
     const updatedTutor = await TutorRepository.updateTutor(id, updateProps);
     return updatedTutor;
   }
+
+  public async tutorDelete(id: string): Promise<ITutor | null> {
+    const deletedTutor = await TutorRepository.deleteTutor(id);
+    return deletedTutor;
+  }
 }
+
 
 export default new TutorService();
