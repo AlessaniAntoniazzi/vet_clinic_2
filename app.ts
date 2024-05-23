@@ -11,38 +11,6 @@ const PORT: Number = 3000;
 
 setupSwagger(app);
 
-/**
- * @swagger
- * /api/tutors:
- *   post:
- *     summary: Create a new tutor
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Tutor'
- *     responses:
- *       201:
- *         description: Tutor created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Tutor'
- *       400:
- *         description: Bad request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ValidationError'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
- */
-
 dotenv.config();
 
 app.use(express.json());

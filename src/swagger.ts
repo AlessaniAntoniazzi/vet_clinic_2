@@ -6,18 +6,16 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Tutor API',
+      title: 'Vet Clinic',
       version: '1.0.0',
       description: 'API documentation for the Tutor application',
     },
     tags: [
       {
         name: 'Tutors',
-        description: 'API for tutors',
       },
       {
         name: 'Pets',
-        description: 'API for pets',
       },
     ],
     components: {
@@ -95,6 +93,40 @@ const options = {
             error: {
               type: 'string',
               example: 'Internal Server Error',
+            },
+          },
+        },
+        BadRequest: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 400,
+            },
+            message: {
+              type: 'string',
+              example: 'Bad Request',
+            },
+            error: {
+              type: 'string',
+              example: 'Bad Request',
+            },
+          },
+        },
+        NotFoundError: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 404,
+            },
+            message: {
+              type: 'string',
+              example: 'Not Found',
+            },
+            error: {
+              type: 'string',
+              example: 'Not Found',
             },
           },
         },
@@ -262,7 +294,59 @@ const options = {
             },
           },
         },
+        delete: {
+          tags: ['Tutors'],
+          summary: 'Delete a tutor by ID',
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                example: '60d21b4667d0d8992e610c85',
+              },
+              description: 'ID of the tutor to delete',
+            },
+          ],
+          responses: {
+            204: {
+              description: 'Tutor deleted successfully',
+            },
+            400: {
+              description: 'Bad request',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/BadRequest',
+                  },
+                },
+              },
+            },
+            404: {
+              description: 'Tutor not found',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/NotFoundError',
+                  },
+                },
+              },
+            },
+            500: {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/InternalServerError',
+                  },
+                },
+              },
+            },
+          },
+        },
       },
+      
     },
   },
   apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
